@@ -1,0 +1,1 @@
+HAPROXY_EXPORTER_OPTS='--web.listen-address=":{{ haproxy_port_arg.exporter }}" --log.format="logger:syslog?appname=haproxy_exporter&local=7" --haproxy.scrape-uri="http://admin:{{ lookup('password', '' + ansible_hostname + ':stats length=12 chars=ascii_letters,digits') }}@{{ ansible_default_ipv4.address }}:{{ haproxy_port_arg.stats }}/haproxy-status?stats;csv"'

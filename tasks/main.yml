@@ -1,3 +1,26 @@
 ---
-- name: Include tasks for specific OS
+- name: Include tasks for specific OS.
   include: '{{ ansible_os_family }}.yml'
+
+- name: Include firewall tasks.
+  include: 'firewall.yml'
+
+- name: Include configuration tasks.
+  include: 'configureation.yml'
+
+- name: Reload the HaProxy service.
+  shell: echo ''
+  notify: 'Ensure haproxy service is enabled'
+  when: haproxy_conf_update is changed
+
+- name: Force the handler to run immediately.
+  meta: flush_handlers
+
+- name: Include prometheus exporter tasks.
+  include: 'exporter.yml'
+  when: exporter_is_install
+
+- include_tasks: 'register.yml'
+  when:
+    - exporter_is_install | bool
+    - consul_public_register | bool

@@ -1,6 +1,11 @@
 ---
-haproxy_repo_name: 'centos-sclo-rh'
-haproxy_repo_url: 'http://mirrors.aliyun.com/centos/{{ ansible_distribution_major_version }}/sclo/$basearch/rh'
+haproxy_repo_name: 'haproxy'
+haproxy_repo_url: 'http://haproxy.hongens.nl/repo/centos/$releasever/$basearch/'
 
 haproxy_packages:
-  - 'rh-haproxy18'
+  - 'haproxy-{{ haproxy_version }}*'
+
+haproxy_exporter_repo_name: 'prometheus'
+haproxy_exporter_repo_url: "http://cache.omygods.com/prometheus-rpm/release/el/{{ansible_distribution_version.split('.')[0]}}/$basearch"
+haproxy_exporter_packages:
+  - 'haproxy_exporter'

@@ -1,9 +1,49 @@
 ---
 # General parameters #
 haproxy_is_install: false # A boolean value, whether install the HaProxy.
+haproxy_version: '2.0' # # Specify the HaProxy version.
 
 # Listen port #
-haproxy_exporter_port: '9137' # Exporter network communication ports.
+haproxy_port_arg:
+  exporter: '9101' # Exporter network communication port.
+  stats: '10089' # The stats page port.
+
+# System Variables #
+haproxy_arg:
+  maxconn: '4000' # The maximum per-process number of concurrent connections.
+  retries: '3' # The number of retries to perform on a server after a connection failure.
+  timeout_http_request: '10s' # The maximum allowed time to wait for a complete HTTP request.
+  timeout_queue: '10s' # The maximum time to wait in the queue for a connection slot to be free.
+  timeout_connect: '10s' # The maximum time to wait for a connection attempt to a server to succeed.
+  timeout_client: '30s' # The inactivity timeout on the client side for half-closed connections.
+  timeout_server: '30s' # The maximum inactivity time on the server side.
+  timeout_http_keep_alive: '10s' # The maximum allowed time to wait for a new HTTP request to appear.
+  timeout_check: '10s' # Check timeout.
+  options: # Server options.
+    - 'httplog'
+    - 'dontlognull'
+    - 'http-server-close'
+    - 'forwardfor except 127.0.0.0/8'
+    - 'redispatch'
+
+# Proxys Variables #
+haproxy_proxy_args: # Essential configuration sections.
+  - name: 'k8s-api'
+    port: '6443'
+    syntax:
+      - "frontend k8s-api"
+      - "  bind 0.0.0.0:6443"
+      - "  mode tcp"
+      - "  option tcplog"
+      - "  default_backend k8s-api"
+      - "backend k8s-api"
+      - "  mode tcp"
+      - "  option tcp-check"
+      - "  balance roundrobin"
+      - "  default-server inter 10s downinter 5s rise 2 fall 2 slowstart 60s maxconn 250 maxqueue 256 weight 100"
+      - "  server k8s-api-1 192.168.0.147:6443 check"
+      - "  server k8s-api-2 192.168.0.148:6443 check"
+      - "  server k8s-api-3 192.168.0.149:6443 check"
 
 # Service Mesh #
 environments: 'SIT' # Define the service environment.

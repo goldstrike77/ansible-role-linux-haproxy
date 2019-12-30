@@ -1,0 +1,52 @@
+global
+  log 127.0.0.1 local0
+  log-send-hostname
+  maxconn {{ haproxy_arg.maxconn }}
+  user haproxy
+  group haproxy
+  daemon
+  nbproc {{ ansible_processor_vcpus }}
+  tune.ssl.default-dh-param 2048
+  tune.ssl.cachesize 100000
+  tune.ssl.lifetime 600
+  tune.ssl.maxrecord 1460
+  ssl-default-bind-ciphers ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384
+  ssl-default-bind-options no-sslv3 no-tlsv10 no-tlsv11 no-tls-tickets
+  ssl-default-server-ciphers ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384
+  ssl-default-server-options no-sslv3 no-tlsv10 no-tlsv11 no-tls-tickets
+  ssl-dh-param-file /etc/haproxy/ssl/dhparam.pem
+
+defaults
+  mode http
+  log global
+{% if haproxy_arg.options is defined%}
+{% for o in haproxy_arg.options %}
+  option {{ o }}
+{% endfor %}
+{% endif %}
+  retries {{ haproxy_arg.retries }}
+  timeout http-request {{ haproxy_arg.timeout_http_request }}
+  timeout queue {{ haproxy_arg.timeout_queue }}
+  timeout connect {{ haproxy_arg.timeout_connect }}
+  timeout client {{ haproxy_arg.timeout_client }}
+  timeout server {{ haproxy_arg.timeout_server }}
+  timeout http-keep-alive {{ haproxy_arg.timeout_http_keep_alive }}
+  timeout check {{ haproxy_arg.timeout_check }}
+  maxconn {{ haproxy_arg.maxconn }}
+
+frontend stats
+  bind 0.0.0.0:{{ haproxy_port_arg.stats }}
+  stats enable
+  stats hide-version
+  stats uri /haproxy-status
+  stats refresh 10s
+  stats auth admin:{{ lookup('password', '' + ansible_hostname + ':stats length=12 chars=ascii_letters,digits') }}
+  stats admin if TRUE
+
+{% if haproxy_proxy_args is defined %}
+{% for haproxy_proxy_arg in haproxy_proxy_args %}
+{% for value in haproxy_proxy_arg.syntax %}
+{{ value }}
+{% endfor %}
+{% endfor %}
+{% endif %}

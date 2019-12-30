@@ -2,7 +2,7 @@
 - name: Include OS-specific variables.
   include_vars: '{{ ansible_os_family }}.yml'
 
-- name: Add Dell Haproxy YUM repositories.
+- name: Add HaProxy YUM repositories.
   yum_repository:
     name: '{{ haproxy_repo_name }}'
     description: '{{ haproxy_repo_name }} YUM repository'
@@ -11,7 +11,7 @@
     gpgcheck: 'no'
     timeout: '60'
 
-- name: Install the Haproxy packages.
+- name: Install the HaProxy packages.
   yum:
     name: '{{ haproxy_packages }}'
     state: 'present'

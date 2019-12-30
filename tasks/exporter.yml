@@ -1,0 +1,34 @@
+---
+- name: Add Prometheus HaProxy exporter YUM repositories.
+  yum_repository:
+    name: '{{ haproxy_exporter_repo_name }}'
+    description: '{{ haproxy_exporter_repo_name }} YUM repository'
+    file: '{{ haproxy_exporter_repo_name }}'
+    baseurl: '{{ haproxy_exporter_repo_url }}'
+    gpgcheck: 'no'
+    timeout: '60'
+
+- name: Install the Prometheus HaProxy exporter packages.
+  yum:
+    name: '{{ haproxy_exporter_packages }}'
+    state: 'present'
+    validate_certs: 'no'
+    disable_gpg_check: 'yes'
+
+- name: Prometheus HaProxy exporter configure file transfer.
+  template:
+    src: 'haproxy_exporter.default.j2'
+    dest: '/etc/default/haproxy_exporter'
+    owner: 'root'
+    group: 'root'
+    mode: '0644'
+  register: haproxy_conf_update
+
+- name: Prometheus HaProxy exporter service is enabled.
+  systemd:
+    name: 'haproxy_exporter.service'
+    enabled: 'yes'
+    state: 'restarted'
+    daemon_reload: yes
+  when:
+    - haproxy_conf_update is changed

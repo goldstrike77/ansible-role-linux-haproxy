@@ -1,0 +1,29 @@
+---
+- name: Gathering service facts.
+  service_facts:
+  register: services_state
+
+- name: Allow HaProxy service port.
+  firewalld:
+    port: '{{ item.value }}/tcp'
+    zone: 'public'
+    permanent: 'true'
+    immediate: 'true'
+    state: 'enabled'
+  loop: '{{ haproxy_port_arg | dict2items }}'
+  when:
+    - services_state.ansible_facts.services["firewalld.service"] is defined
+    - services_state.ansible_facts.services["firewalld.service"].state == 'running'
+
+- name: Allow HaProxy listen port.
+  firewalld:
+    port: '{{ item.port }}/tcp'
+    zone: 'public'
+    permanent: 'true'
+    immediate: 'true'
+    state: 'enabled'
+  loop: '{{ haproxy_proxy_args }}'
+  when:
+    - haproxy_proxy_args is defined
+    - services_state.ansible_facts.services["firewalld.service"] is defined
+    - services_state.ansible_facts.services["firewalld.service"].state == 'running'
