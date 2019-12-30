@@ -1,0 +1,30 @@
+---
+- name: Install the KeepAlived packages.
+  yum:
+    name: 'keepalived'
+    state: 'present'
+    validate_certs: 'no'
+    update_cache: 'yes'
+    disable_gpg_check: 'yes'
+  register: haproxy_keepalived_update
+  until: haproxy_keepalived_update is succeeded
+  retries: 3
+  delay: 5
+
+- name: KeepAlived Configure file transfer.
+  template:
+    src: 'keepalived.conf.j2'
+    dest: '/etc/keepalived/keepalived.conf'
+    backup: 'yes'
+    owner: 'root'
+    group: 'root'
+    mode: '0644'
+  register: haproxy_keepalived_conf
+
+- name: KeepAlived service is enabled.
+  systemd:
+    name: 'keepalived.service'
+    enabled: 'yes'
+    state: 'restarted'
+    daemon_reload: 'yes'
+  when: haproxy_keepalived_update is changed or haproxy_keepalived_conf is changed

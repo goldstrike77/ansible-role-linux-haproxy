@@ -8,6 +8,10 @@ haproxy_port_arg:
   exporter: '9101' # Exporter network communication port.
   stats: '10089' # The stats page port.
 
+# KeepAlived Variables #
+haproxy_keepalived_dept: false
+haproxy_keepalived_vip: '10.10.10.10'
+
 # System Variables #
 haproxy_arg:
   maxconn: '4000' # The maximum per-process number of concurrent connections.
@@ -29,10 +33,10 @@ haproxy_arg:
 # Proxys Variables #
 haproxy_proxy_args: # Essential configuration sections.
   - name: 'k8s-api'
-    port: '6443'
+    port: '16443'
     syntax:
       - "frontend k8s-api"
-      - "  bind 0.0.0.0:6443"
+      - "  bind 0.0.0.0:16443"
       - "  mode tcp"
       - "  option tcplog"
       - "  default_backend k8s-api"

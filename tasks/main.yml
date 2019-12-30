@@ -1,4 +1,13 @@
 ---
+- name: Gather HaProxy node variables for HA cluster.
+  set_fact:
+    haproxy_servers: "\
+      {% set _haproxy_servers = [] %}\
+      {% for host in groups[group_names[-1]] %}\
+        {% if _haproxy_servers.append(hostvars[host]['ansible_host']) %}{% endif %}\
+      {% endfor %}\
+      {{ _haproxy_servers }}"
+
 - name: Include tasks for specific OS.
   include: '{{ ansible_os_family }}.yml'
 
@@ -24,3 +33,6 @@
   when:
     - exporter_is_install | bool
     - consul_public_register | bool
+
+- include_tasks: 'keepalived.yml'
+  when: haproxy_keepalived_dept | bool
