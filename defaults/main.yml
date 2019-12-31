@@ -32,23 +32,23 @@ haproxy_arg:
     - 'redispatch'
 
 # Proxys Variables #
-haproxy_proxy_args: # Essential configuration sections.
-  - name: 'k8s-api'
-    port: '16443'
-    syntax:
-      - "frontend k8s-api"
-      - "  bind 0.0.0.0:16443"
-      - "  mode tcp"
-      - "  option tcplog"
-      - "  default_backend k8s-api"
-      - "backend k8s-api"
-      - "  mode tcp"
-      - "  option tcp-check"
-      - "  balance roundrobin"
-      - "  default-server inter 10s downinter 5s rise 2 fall 2 slowstart 60s maxconn 250 maxqueue 256 weight 100"
-      - "  server k8s-api-1 192.168.0.147:6443 check"
-      - "  server k8s-api-2 192.168.0.148:6443 check"
-      - "  server k8s-api-3 192.168.0.149:6443 check"
+#haproxy_proxy_args: # Essential configuration sections.
+#  - name: 'k8s-api'
+#    port: '16443'
+#    syntax:
+#      - "frontend k8s-api"
+#      - "  bind 0.0.0.0:16443"
+#      - "  mode tcp"
+#      - "  option tcplog"
+#      - "  default_backend k8s-api"
+#      - "backend k8s-api"
+#      - "  mode tcp"
+#      - "  option tcp-check"
+#      - "  balance roundrobin"
+#      - "  default-server inter 10s downinter 5s rise 2 fall 2 slowstart 60s maxconn 250 maxqueue 256 weight 100"
+#      - "  server k8s-api-1 192.168.0.147:6443 check"
+#      - "  server k8s-api-2 192.168.0.148:6443 check"
+#      - "  server k8s-api-3 192.168.0.149:6443 check"
 
 # Service Mesh #
 environments: 'SIT' # Define the service environment.
