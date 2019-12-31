@@ -15,7 +15,7 @@ vrrp_instance VI_1 {
 
   interface eth0
   virtual_router_id 51
-  priority {% if haproxy_servers[0] in ansible_default_ipv4.address %}100{% else %}{{ 99 | random(start=1, step=1) }}{% endif %}
+  priority {% if haproxy_servers[0] in ansible_default_ipv4.address %}100{% else %}{{ 99 | random(seed=ansible_hostname,start=1, step=1) }}{% endif %}
 
   advert_int 1
   authentication {

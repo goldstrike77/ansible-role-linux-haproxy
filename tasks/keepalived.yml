@@ -1,11 +1,14 @@
 ---
 - name: Install the KeepAlived packages.
   yum:
-    name: 'keepalived'
+    name: '{{ item }}'
     state: 'present'
     validate_certs: 'no'
     update_cache: 'yes'
     disable_gpg_check: 'yes'
+  loop:
+    - 'keepalived'
+    - 'psmisc'
   register: haproxy_keepalived_update
   until: haproxy_keepalived_update is succeeded
   retries: 3

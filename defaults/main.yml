@@ -5,7 +5,8 @@ haproxy_version: '2.0' # # Specify the HaProxy version.
 
 # Listen port #
 haproxy_port_arg:
-  exporter: '9101' # Exporter network communication port.
+  haproxy_exporter: '9101' # HaProxy Exporter network communication port.
+  keepalived_exporter: '9650' # Keepalived exporter network communication port.
   stats: '10089' # The stats page port.
 
 # KeepAlived Variables #
