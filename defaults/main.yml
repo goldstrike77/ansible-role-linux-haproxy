@@ -1,17 +1,17 @@
 ---
 # General parameters #
 haproxy_is_install: false # A boolean value, whether install the HaProxy.
-haproxy_version: '2.0' # # Specify the HaProxy version.
+haproxy_version: '2.0' # Specify the HaProxy version.
 
 # Listen port #
 haproxy_port_arg:
   haproxy_exporter: '9101' # HaProxy Exporter network communication port.
   keepalived_exporter: '9650' # Keepalived exporter network communication port.
-  stats: '10089' # The stats page port.
+  stats: '10089' # The HaProxy stats page port.
 
 # KeepAlived Variables #
-haproxy_keepalived_dept: false
-haproxy_keepalived_vip: '10.10.10.10'
+haproxy_keepalived_dept: false # A boolean value, whether provides High-Availability.
+haproxy_keepalived_vip: '10.10.10.10' # Virtual IP address.
 
 # System Variables #
 haproxy_arg:
@@ -23,8 +23,8 @@ haproxy_arg:
   timeout_client: '30s' # The inactivity timeout on the client side for half-closed connections.
   timeout_server: '30s' # The maximum inactivity time on the server side.
   timeout_http_keep_alive: '10s' # The maximum allowed time to wait for a new HTTP request to appear.
-  timeout_check: '10s' # Check timeout.
-  options: # Server options.
+  timeout_check: '10s' # Global Check timeout.
+  options: # Global Server options.
     - 'httplog'
     - 'dontlognull'
     - 'http-server-close'
