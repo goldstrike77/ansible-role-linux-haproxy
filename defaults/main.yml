@@ -47,8 +47,24 @@ haproxy_arg:
 #      - "  balance roundrobin"
 #      - "  default-server inter 10s downinter 5s rise 2 fall 2 slowstart 60s maxconn 250 maxqueue 256 weight 100"
 #      - "  server k8s-api-1 192.168.0.147:6443 check"
-#      - "  server k8s-api-2 192.168.0.148:6443 check"
-#      - "  server k8s-api-3 192.168.0.149:6443 check"
+#  - name: 'https-in'
+#    port: '443'
+#    syntax:
+#      - "frontend https-in"
+#      - "  bind 0.0.0.0:443 ssl crt /etc/haproxy/ssl/certificate.pem"
+#      - "  reqirep ^(accept:\\ .*)(,)(.*) \\1,\\3"
+#      - "  use_backend kibana if { path /kibana } or { path_beg /kibana/ }"
+#      - "  use_backend grafana if { path /grafana } or { path_beg /grafana/ }"
+#      - "backend grafana"
+#      - "  http-request set-path %[path,regsub(^/grafana/?,/)]"
+#      - "  balance source"
+#      - "  default-server inter 10s downinter 5s rise 2 fall 2 slowstart 60s maxconn 2048 maxqueue 2048 weight 1"
+#      - "  server grafana 192.168.0.168:3000 check"
+#      - "backend kibana"
+#      - "  reqirep ^(accept:\\ .*)(,)(.*) \\1,\\3"
+#      - "  balance source"
+#      - "  default-server inter 10s downinter 5s rise 2 fall 2 slowstart 60s maxconn 2048 maxqueue 2048 weight 1"
+#      - "  server kibana 192.168.0.168:5601 check"
 
 # Service Mesh #
 environments: 'SIT' # Define the service environment.
