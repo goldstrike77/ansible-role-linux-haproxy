@@ -53,6 +53,10 @@ There are some variables in defaults/main.yml which can (Or needs to) be overrid
 * `haproxy_port_arg.keepalived_exporter`: Keepalived exporter network communication port.
 * `haproxy_port_arg.stats`: The HaProxy stats page port.
 
+##### Log Variables
+* `haproxy_syslog_server`: Defines the address list of a syslog server.
+* `haproxy_syslog_port`: Defines the input port of a syslog server for access log.
+
 ##### KeepAlived Variables
 * `haproxy_keepalived_dept`: A boolean value, whether provides High-Availability.
 * `haproxy_keepalived_vip`: Virtual IP address.
@@ -110,6 +114,9 @@ You can also use the group_vars or the host_vars files for setting the variables
       haproxy_exporter: '9101'
       keepalived_exporter: '9650'
       stats: '10089'
+    haproxy_syslog_server:
+      - '127.0.0.1'
+    haproxy_syslog_port: '1514'
     haproxy_keepalived_dept: true
     haproxy_keepalived_vip: '10.10.10.10'
     haproxy_arg:
@@ -145,7 +152,7 @@ You can also use the group_vars or the host_vars files for setting the variables
           - "  server k8s-api-1 10.10.10.11:6443 check"
           - "  server k8s-api-2 10.10.10.12:6443 check"
           - "  server k8s-api-3 10.10.10.13:6443 check"
-    environments: 'SIT'
+    environments: 'Development'
     tags:
       subscription: 'default'
       owner: 'nobody'

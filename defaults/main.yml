@@ -9,6 +9,11 @@ haproxy_port_arg:
   keepalived_exporter: '9650' # Keepalived exporter network communication port.
   stats: '10089' # The HaProxy stats page port.
 
+# Log Variables #
+haproxy_syslog_server: # Defines the address list of a syslog server.
+   - '127.0.0.1'
+haproxy_syslog_port: '1514' # Defines the input port of a syslog server for access log.
+
 # KeepAlived Variables #
 haproxy_keepalived_dept: false # A boolean value, whether provides High-Availability.
 haproxy_keepalived_vip: '10.10.10.10' # Virtual IP address.
@@ -17,13 +22,13 @@ haproxy_keepalived_vip: '10.10.10.10' # Virtual IP address.
 haproxy_arg:
   maxconn: '4000' # The maximum per-process number of concurrent connections.
   retries: '3' # The number of retries to perform on a server after a connection failure.
-  timeout_http_request: '10s' # The maximum allowed time to wait for a complete HTTP request.
-  timeout_queue: '10s' # The maximum time to wait in the queue for a connection slot to be free.
-  timeout_connect: '10s' # The maximum time to wait for a connection attempt to a server to succeed.
+  timeout_http_request: '30s' # The maximum allowed time to wait for a complete HTTP request.
+  timeout_queue: '30s' # The maximum time to wait in the queue for a connection slot to be free.
+  timeout_connect: '30s' # The maximum time to wait for a connection attempt to a server to succeed.
   timeout_client: '30s' # The inactivity timeout on the client side for half-closed connections.
   timeout_server: '30s' # The maximum inactivity time on the server side.
-  timeout_http_keep_alive: '10s' # The maximum allowed time to wait for a new HTTP request to appear.
-  timeout_check: '10s' # Global Check timeout.
+  timeout_http_keep_alive: '30s' # The maximum allowed time to wait for a new HTTP request to appear.
+  timeout_check: '30s' # Global Check timeout.
   options: # Global Server options.
     - 'httplog'
     - 'dontlognull'
@@ -67,7 +72,7 @@ haproxy_arg:
 #      - "  server kibana 192.168.0.168:5601 check"
 
 # Service Mesh #
-environments: 'SIT' # Define the service environment.
+environments: 'Development' # Define the service environment.
 #tags: # Define the service custom label.
 #  subscription: 'default'
 #  owner: 'nobody'
