@@ -1,1 +1,1 @@
-KEEPALIVED_EXPORTER_OPTS='-web.listen-address ":{{ haproxy_port_arg.keepalived_exporter }}"'
+KEEPALIVED_EXPORTER_OPTS='-web.listen-address "{{ ansible_default_ipv4.address }}:{{ haproxy_port_arg.keepalived_exporter }}"'
