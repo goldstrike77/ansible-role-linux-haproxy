@@ -6,6 +6,7 @@ Documentation=https://github.com/gen2brain/keepalived_exporter
 After=network.target
 
 [Service]
+StandardError=null
 EnvironmentFile=-/etc/default/keepalived_exporter
 User=root
 LimitNOFILE=4096

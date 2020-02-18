@@ -24,10 +24,22 @@
     mode: '0644'
   register: haproxy_keepalived_conf
 
+- name: Keepalived systemd configuration.
+  lineinfile:
+    state: 'present'
+    dest: '/lib/systemd/system/keepalived.service'
+    insertafter: '\[Service\]'
+    regexp: '{{ item.regexp }}'
+    line: '{{ item.line }}'
+  loop:
+    - { regexp: '^LimitNOFILE=', line: 'LimitNOFILE=32768' }
+    - { regexp: '^LimitNPROC=',  line: 'LimitNPROC=32768' }
+  register: haproxy_keepalived_systemd
+
 - name: KeepAlived service is enabled.
   systemd:
     name: 'keepalived.service'
     enabled: 'yes'
     state: 'restarted'
     daemon_reload: 'yes'
-  when: haproxy_keepalived_update is changed or haproxy_keepalived_conf is changed
+  when: haproxy_keepalived_update is changed or haproxy_keepalived_conf is changed or haproxy_keepalived_systemd is changed
