@@ -27,7 +27,7 @@ __Table of Contents__
 - [Contributors](#Contributors)
 
 ## Overview
-This Ansible role installs HaProxy on linux operating system, including establishing a filesystem structure and server configuration with some common operational features.
+This Ansible role installs HaProxy on linux operating system, including establishing a filesystem structure and server configuration with some common operational features.The keepalived daemon can be used to monitor services or systems and to automatically failover to a standby if problems occur. Keepalived will configure a floating IP address that can be moved between three capable load balancers. These will each be configured to split traffic between backend web servers. If the primary load balancer goes down, the floating IP will be moved to the second load balancer automatically, keep the service availability.
 
 ## Requirements
 ### Operating systems
@@ -90,7 +90,8 @@ There are some variables in defaults/main.yml which can (Or needs to) be overrid
 There are some variables in vars/main.yml:
 
 ## Dependencies
-- Ansible versions > 2.8 are supported.
+- Ansible versions >= 2.8
+- Python >= 2.7.5
 
 ## Example
 
