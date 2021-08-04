@@ -9,6 +9,7 @@
     file: '{{ haproxy_repo_name }}'
     baseurl: '{{ haproxy_repo_url }}'
     gpgcheck: 'no'
+    sslverify: 'no'
     timeout: '60'
 
 - name: Install the HaProxy packages.
