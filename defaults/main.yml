@@ -27,6 +27,8 @@ haproxy_arg:
   timeout_connect: '30s' # The maximum time to wait for a connection attempt to a server to succeed.
   timeout_client: '30s' # The inactivity timeout on the client side for half-closed connections.
   timeout_server: '30s' # The maximum inactivity time on the server side.
+  timeout_tunnel: '30s' # Set the maximum inactivity time on the client and server side for tunnels.
+  timeout_client_fin: '30s' # The inactivity timeout applies when the client is shut down.
   timeout_http_keep_alive: '30s' # The maximum allowed time to wait for a new HTTP request to appear.
   timeout_check: '30s' # Global Check timeout.
   options: # Global Server options.

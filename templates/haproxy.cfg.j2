@@ -30,6 +30,8 @@ defaults
   timeout connect {{ haproxy_arg.timeout_connect }}
   timeout client {{ haproxy_arg.timeout_client }}
   timeout server {{ haproxy_arg.timeout_server }}
+  timeout tunnel {{ haproxy_arg.timeout_tunnel }}
+  timeout client-fin {{ haproxy_arg.timeout_client_fin }}
   timeout http-keep-alive {{ haproxy_arg.timeout_http_keep_alive }}
   timeout check {{ haproxy_arg.timeout_check }}
   maxconn {{ haproxy_arg.maxconn }}

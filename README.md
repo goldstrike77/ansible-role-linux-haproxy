@@ -69,6 +69,8 @@ There are some variables in defaults/main.yml which can (Or needs to) be overrid
 * `haproxy_arg.timeout_connect`: The maximum time to wait for a connection attempt to a server to succeed.
 * `haproxy_arg.timeout_client`: The inactivity timeout on the client side for half-closed connections.
 * `haproxy_arg.timeout_server`: The maximum inactivity time on the server side.
+* `haproxy_arg.timeout_client_fin`: The inactivity timeout applies when the client is shut down.
+* `haproxy_arg.timeout_tunnel`: Set the maximum inactivity time on the client and server side for tunnels.
 * `haproxy_arg.timeout_http_keep_alive`: The maximum allowed time to wait for a new HTTP request to appear.
 * `haproxy_arg.timeout_check`: Global Check timeout.
 * `haproxy_arg.options`: Global Server options.
@@ -133,6 +135,8 @@ haproxy_arg:
   timeout_connect: '10s'
   timeout_client: '30s'
   timeout_server: '30s'
+  timeout_tunnel: '30s'
+  timeout_client_fin: '30s'
   timeout_http_keep_alive: '10s'
   timeout_check: '10s'
   options:
