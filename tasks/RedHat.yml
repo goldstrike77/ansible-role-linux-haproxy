@@ -1,23 +1,23 @@
 ---
 - name: Include OS-specific variables.
-  include_vars: '{{ ansible_os_family }}.yml'
+  include_vars: "{{ ansible_distribution_file_variety }}.yml"
 
 - name: Add HaProxy YUM repositories.
   yum_repository:
-    name: '{{ haproxy_repo_name }}'
-    description: '{{ haproxy_repo_name }} YUM repository'
-    file: '{{ haproxy_repo_name }}'
-    baseurl: '{{ haproxy_repo_url }}'
-    gpgcheck: 'no'
-    sslverify: 'no'
-    timeout: '60'
+    name: "{{ haproxy_repo_name }}"
+    description: "{{ haproxy_repo_name }} YUM repository"
+    file: "{{ haproxy_repo_name }}"
+    baseurl: "{{ haproxy_repo_url }}"
+    gpgcheck: "no"
+    sslverify: "no"
+    timeout: "60"
 
 - name: Install the HaProxy packages.
   yum:
-    name: '{{ haproxy_packages }}'
-    state: 'present'
-    validate_certs: 'no'
-    disable_gpg_check: 'yes'
+    name: "{{ haproxy_packages }}"
+    state: "present"
+    validate_certs: "no"
+    disable_gpg_check: "yes"
   register: haproxy_yum_status
   until: haproxy_yum_status is succeeded
   retries: 3

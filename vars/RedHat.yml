@@ -1,11 +1,7 @@
 ---
-haproxy_repo_name: 'haproxy'
-haproxy_repo_url: 'http://haproxy.hongens.nl/repo/centos/$releasever/$basearch/'
+haproxy_repo_name: "haproxy"
+haproxy_repo_url: "http://packages.zenetys.com/latest/redhat/$releasever/RPMS/$basearch/"
+haproxy_packages: "haproxy{{ haproxy_version }}z"
 
-haproxy_packages:
-  - 'haproxy-{{ haproxy_version }}*'
-
-haproxy_exporter_repo_name: 'prometheus'
-haproxy_exporter_repo_url: "http://cache.omygods.com/prometheus-rpm/release/el/{{ansible_distribution_version.split('.')[0]}}/$basearch"
-haproxy_exporter_packages:
-  - 'haproxy_exporter'
+haproxy_exporter_repo_name: "prometheus"
+haproxy_exporter_repo_url: "http://packagecloud.io/prometheus-rpm/release/el/$releasever/$basearch/"

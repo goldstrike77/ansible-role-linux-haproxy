@@ -1,3 +1,48 @@
 ---
-- include: 'RedHat.yml'
-  when: ansible_os_family == 'RedHat'
+- name: Enable HaProxy service.
+  systemd:
+    name: "haproxy.service"
+    enabled: "yes"
+    state: "restarted"
+    daemon_reload: "yes"
+  listen: Ensure haproxy service is enabled.
+
+- name: Disable HaProxy service.
+  systemd:
+    name: "haproxy.service"
+    enabled: "no"
+    state: "stopped"
+    daemon_reload: "yes"
+  listen: Ensure haproxy service is disabled.
+
+- name: Enable Keepalived service.
+  systemd:
+    name: "keepalived.service"
+    enabled: "yes"
+    state: "restarted"
+    daemon_reload: "yes"
+  listen: Ensure keepalived service is enabled.
+
+- name: Enable HaProxy exporter service.
+  systemd:
+    name: "haproxy_exporter.service"
+    enabled: "yes"
+    state: "restarted"
+    daemon_reload: "yes"
+  listen: Ensure haproxy exporter service is enabled.
+
+- name: Disable HaProxy exporter service.
+  systemd:
+    name: "haproxy_exporter.service"
+    enabled: "no"
+    state: "stopped"
+    daemon_reload: "yes"
+  listen: Ensure haproxy exporter service is disabled.
+
+- name: Enable Keepalived exporter service.
+  systemd:
+    name: "keepalived_exporter.service"
+    enabled: "yes"
+    state: "restarted"
+    daemon_reload: "yes"
+  listen: Ensure keepalived exporter service is enabled.

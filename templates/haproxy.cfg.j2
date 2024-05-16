@@ -1,11 +1,12 @@
 global
+{% if haproxy_syslog_server is defined %}
   log {{ haproxy_syslog_server | list | random(seed=ansible_hostname) }}:{{ haproxy_syslog_port }} len 8096 format rfc5424 syslog
   log-send-hostname
+{% endif %}
   maxconn {{ haproxy_arg.maxconn }}
   user haproxy
   group haproxy
   daemon
-  nbproc {{ ansible_processor_vcpus }}
   tune.ssl.default-dh-param 2048
   tune.ssl.cachesize 100000
   tune.ssl.lifetime 600

@@ -1,14 +1,12 @@
 ---
 - name: Install the KeepAlived packages.
   yum:
-    name: '{{ item }}'
-    state: 'present'
-    validate_certs: 'no'
-    update_cache: 'yes'
-    disable_gpg_check: 'yes'
-  loop:
-    - 'keepalived'
-    - 'psmisc'
+    name: "{{ item }}"
+    state: "present"
+    validate_certs: "no"
+    update_cache: "yes"
+    disable_gpg_check: "yes"
+  loop: ["keepalived", "psmisc"]
   register: haproxy_keepalived_update
   until: haproxy_keepalived_update is succeeded
   retries: 3
@@ -16,30 +14,30 @@
 
 - name: KeepAlived Configure file transfer.
   template:
-    src: 'keepalived.conf.j2'
-    dest: '/etc/keepalived/keepalived.conf'
-    backup: 'yes'
-    owner: 'root'
-    group: 'root'
-    mode: '0644'
-  register: haproxy_keepalived_conf
+    src: "keepalived.conf.j2"
+    dest: "/etc/keepalived/keepalived.conf"
+    backup: "yes"
+    owner: "root"
+    group: "root"
+    mode: "0644"
+  notify: "Ensure keepalived service is enabled."
+
+- name: HaProxy service control file transfer.
+  copy:
+    src: "notfiy-keepalived.sh"
+    dest: "/etc/keepalived/notify-keepalived.sh"
+    owner: "root"
+    group: "root"
+    mode: "0755"
 
 - name: Keepalived systemd configuration.
   lineinfile:
-    state: 'present'
-    dest: '/lib/systemd/system/keepalived.service'
+    state: "present"
+    dest: "/lib/systemd/system/keepalived.service"
     insertafter: '\[Service\]'
-    regexp: '{{ item.regexp }}'
-    line: '{{ item.line }}'
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
   loop:
-    - { regexp: '^LimitNOFILE=', line: 'LimitNOFILE=32768' }
-    - { regexp: '^LimitNPROC=',  line: 'LimitNPROC=32768' }
-  register: haproxy_keepalived_systemd
-
-- name: KeepAlived service is enabled.
-  systemd:
-    name: 'keepalived.service'
-    enabled: 'yes'
-    state: 'restarted'
-    daemon_reload: 'yes'
-  when: haproxy_keepalived_update is changed or haproxy_keepalived_conf is changed or haproxy_keepalived_systemd is changed
+    - { regexp: "^LimitNOFILE=", line: "LimitNOFILE=32768" }
+    - { regexp: "^LimitNPROC=", line: "LimitNPROC=32768" }
+  notify: "Ensure keepalived service is enabled."

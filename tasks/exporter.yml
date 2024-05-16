@@ -1,74 +1,53 @@
 ---
 - name: Add Prometheus HaProxy exporter YUM repositories.
   yum_repository:
-    name: '{{ haproxy_exporter_repo_name }}'
-    description: '{{ haproxy_exporter_repo_name }} YUM repository'
-    file: '{{ haproxy_exporter_repo_name }}'
-    baseurl: '{{ haproxy_exporter_repo_url }}'
-    gpgcheck: 'no'
-    timeout: '60'
+    name: "{{ haproxy_exporter_repo_name }}"
+    description: "{{ haproxy_exporter_repo_name }} YUM repository"
+    file: "{{ haproxy_exporter_repo_name }}"
+    baseurl: "{{ haproxy_exporter_repo_url }}"
+    gpgcheck: "no"
+    timeout: "60"
 
-- name: Install the Prometheus HaProxy exporter packages.
+- name: Install the Prometheus exporter packages.
   yum:
-    name: '{{ haproxy_exporter_packages }}'
-    state: 'present'
-    validate_certs: 'no'
-    disable_gpg_check: 'yes'
+    name: "{{ item.name }}"
+    state: "present"
+    validate_certs: "no"
+    disable_gpg_check: "yes"
+  register: haproxy_exporter_yum_status
+  until: haproxy_exporter_yum_status is succeeded
+  loop:
+    - { name: "haproxy_exporter" }
+    - { name: "keepalived_exporter", create: haproxy_keepalived_dept | bool }
+  retries: 3
+  delay: 5
 
-- name: Prometheus HaProxy exporter configure file transfer.
+- name: HaProxy exporter configure file transfer.
   template:
-    src: 'haproxy_exporter.default.j2'
-    dest: '/etc/default/haproxy_exporter'
-    owner: 'root'
-    group: 'root'
-    mode: '0644'
-  register: haproxy_conf_update
+    src: "haproxy_exporter.default.j2"
+    dest: "/etc/default/haproxy_exporter"
+    owner: "root"
+    group: "root"
+    mode: "0644"
+  notify: "Ensure haproxy exporter service is enabled."
+  when: not haproxy_keepalived_dept | bool
 
-- name: Prometheus HaProxy exporter service is enabled.
-  systemd:
-    name: 'haproxy_exporter.service'
-    enabled: 'yes'
-    state: 'restarted'
-    daemon_reload: yes
-  when:
-    - haproxy_conf_update is changed
-
-- name: Keepalived exporter program binary transfer.
-  unarchive:
-    src: 'keepalived_exporter.tar.xz'
-    dest: '/usr/local/bin'
-    owner: 'root'
-    group: 'root'
-    mode: '0755'
-  register: haproxy_keepalived_exporter_update
+- name: HaProxy exporter configure file transfer.
+  template:
+    src: "haproxy_exporter.default.j2"
+    dest: "/etc/default/haproxy_exporter"
+    owner: "root"
+    group: "root"
+    mode: "0644"
+  notify: "Ensure haproxy exporter service is enabled."
   when: haproxy_keepalived_dept | bool
 
 - name: Keepalived exporter configure file transfer.
   template:
-    src: 'keepalived_exporter.default.j2'
-    dest: '/etc/default/keepalived_exporter'
-    owner: 'root'
-    group: 'root'
-    mode: '0644'
-  register: haproxy_keepalived_exporter_config
+    src: "keepalived_exporter.default.j2"
+    dest: "/etc/default/keepalived_exporter"
+    owner: "root"
+    group: "root"
+    mode: "0644"
+  notify: "Ensure keepalived exporter service is enabled."
   when: haproxy_keepalived_dept | bool
-
-- name: Keepalived service file transfer.
-  copy:
-    src: 'keepalived_exporter.service'
-    dest: '/lib/systemd/system'
-    owner: 'root'
-    group: 'root'
-    mode: '0644'
-  register: haproxy_keepalived_systemd_update
-  when: haproxy_keepalived_dept | bool
-
-- name: Reloading the Keepalived exporter service.
-  systemd:
-    name: 'keepalived_exporter.service'
-    enabled: 'yes'
-    state: 'restarted'
-    daemon_reload: 'yes'
-  when:
-    - haproxy_keepalived_dept | bool
-    - haproxy_keepalived_exporter_update is changed or haproxy_keepalived_exporter_config is changed or haproxy_keepalived_systemd_update is changed

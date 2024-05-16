@@ -1,7 +1,7 @@
 ---
 # General parameters #
-haproxy_is_install: false # A boolean value, whether install the HaProxy.
-haproxy_version: '2.0' # Specify the HaProxy version.
+haproxy_is_install: false # A boolean to determine whether or not to install the HaProxy.
+haproxy_version: '28' # Specify the HaProxy version.
 
 # Listen port #
 haproxy_port_arg:
@@ -10,9 +10,8 @@ haproxy_port_arg:
   stats: '10089' # The HaProxy stats page port.
 
 # Log Variables #
-haproxy_syslog_server: # Defines the address list of a syslog server.
-   - '127.0.0.1'
-haproxy_syslog_port: '1514' # Defines the input port of a syslog server for access log.
+#haproxy_syslog_server: ["127.0.0.1"] # Defines the address list of a syslog server.
+#haproxy_syslog_port: '1514' # Defines the input port of a syslog server for access log.
 
 # KeepAlived Variables #
 haproxy_keepalived_dept: false # A boolean value, whether provides High-Availability.

@@ -1,0 +1,31 @@
+---
+- name: Set haproxy_selinux to false for default.
+  set_fact:
+    haproxy_selinux: "{{ false }}"
+
+- name: Get getenforce binary.
+  stat:
+    path: "/usr/sbin/getenforce"
+  register: getenforce_bin
+  become: yes
+
+- name: Collect getenforce output.
+  command: getenforce
+  register: sestatus
+  when: "getenforce_bin.stat.exists"
+  changed_when: false
+  become: yes
+
+- name: Set haproxy_selinux to true if getenforce returns Enforcing or Permissive.
+  set_fact:
+    haproxy_selinux: "{{ true }}"
+  when: 'getenforce_bin.stat.exists and ("Enforcing" in sestatus.stdout or "Permissive" in sestatus.stdout)'
+
+- name: Allow haproxy to start SELinux.
+  selinux_permissive:
+    name: "haproxy_t"
+    permissive: true
+  become: yes
+  async: 35
+  poll: 0
+  when: haproxy_selinux | bool

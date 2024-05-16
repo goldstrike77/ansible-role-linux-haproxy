@@ -4,35 +4,33 @@
     haproxy_servers: "\
       {% set _haproxy_servers = [] %}\
       {% for host in groups[group_names[0]] %}\
-        {% if _haproxy_servers.append(hostvars[host]['ansible_host']) %}{% endif %}\
+      {% if _haproxy_servers.append(hostvars[host]['ansible_host']) %}{% endif %}\
       {% endfor %}\
       {{ _haproxy_servers }}"
+  when: haproxy_servers is not defined or haproxy_servers | length < 1
 
 - name: Include tasks for specific OS.
-  include: '{{ ansible_os_family }}.yml'
+  include: "{{ ansible_distribution_file_variety }}.yml"
+
+- name: Straight to getenforce selinux status.
+  include: "selinux.yml"
 
 - name: Include firewall tasks.
-  include: 'firewall.yml'
+  include: "firewall.yml"
 
 - name: Include configuration tasks.
-  include: 'configureation.yml'
+  include: "configureation.yml"
 
-- name: Reload the HaProxy service.
-  shell: echo ''
-  notify: 'Ensure haproxy service is enabled'
-  when: haproxy_conf_update is changed
-
-- name: Force the handler to run immediately.
-  meta: flush_handlers
-
-- include_tasks: 'keepalived.yml'
+- include_tasks: "keepalived.yml"
   when: haproxy_keepalived_dept | bool
 
 - name: Include prometheus exporter tasks.
-  include: 'exporter.yml'
-  when: exporter_is_install
+  include: "exporter.yml"
 
-- include_tasks: 'register.yml'
+- include_tasks: "register.yml"
   when:
     - exporter_is_install | bool
     - consul_public_register | bool
+
+- name: Force the handler to run immediately.
+  meta: flush_handlers

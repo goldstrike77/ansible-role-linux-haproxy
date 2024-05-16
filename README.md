@@ -1,11 +1,9 @@
 ![](https://img.shields.io/badge/Ansible-haproxy-green.svg?logo=angular&style=for-the-badge)
 
->__Please note that the original design goal of this role was more concerned with the initial installation and bootstrapping environment, which currently does not involve performing continuous maintenance, and therefore are only suitable for testing and development purposes,  should not be used in production environments.__
+>__Please note that the original design goal of this role was more concerned with the initial installation and bootstrapping environment, which currently does not involve performing continuous maintenance, and therefore are only suitable for testing and development purposes,  should not be used in production environments. The author does not guarantee the accuracy, completeness, reliability, and availability of the role content. Under no circumstances will the author be held responsible or liable in any way for any claims, damages, losses, expenses, costs or liabilities whatsoever, including, without limitation, any direct or indirect damages for loss of profits, business interruption or loss of information.__
 
->__请注意，此角色的最初设计目标更关注初始安装和引导环境，目前不涉及执行连续维护，因此仅适用于测试和开发目的，不应在生产环境中使用。__
-
+>__请注意，此角色的最初设计目标更关注初始安装和引导环境，目前不涉及执行连续维护，因此仅适用于测试和开发目的，不应在生产环境中使用。作者不对角色内容之准确性、完整性、可靠性、可用性做保证。在任何情况下，作者均不对任何索赔，损害，损失，费用，成本或负债承担任何责任，包括但不限于因利润损失，业务中断或信息丢失而造成的任何直接或间接损害。__
 ___
-
 <p><img src="https://raw.githubusercontent.com/goldstrike77/goldstrike77.github.io/master/img/logo/logo_haproxy.png" align="right" /></p>
 
 __Table of Contents__
@@ -33,13 +31,13 @@ This Ansible role installs HaProxy on linux operating system, including establis
 ### Operating systems
 This role will work on the following operating systems:
 
-  * CentOS 7
+  * CentOS 7, 8
 
 ### HaProxy versions
 
 The following list of supported the haproxy releases:
 
-* 2.0
+* 2.x
 
 ## Role variables
 ### Main parameters #
@@ -103,7 +101,7 @@ There are some variables in vars/main.yml:
 ### Hosts inventory file
 See tests/inventory for an example.
 
-    node01 ansible_host='192.168.1.10' haproxy_version='2.0'
+    node01 ansible_host='192.168.1.10' haproxy_version='28'
 
 ### Vars in role configuration
 Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
@@ -111,13 +109,13 @@ Including an example of how to use your role (for instance, with variables passe
     - hosts: all
       roles:
          - role: ansible-role-linux-haproxy
-           haproxy_version: '2.0'
+           haproxy_version: '28'
 
 ### Combination of group vars and playbook
 You can also use the group_vars or the host_vars files for setting the variables needed for this role. File you should change: group_vars/all or host_vars/`group_name`
 
 ```yaml
-haproxy_version: '2.0'
+haproxy_version: '28'
 haproxy_port_arg:
   haproxy_exporter: '9101'
   keepalived_exporter: '9650'
@@ -191,3 +189,4 @@ Please send your suggestions to make this role better.
 Please donate to the following monero address.
 
     46CHVMbb6wQV2PJYEbahb353SYGqXhcdFQVEWdCnHb6JaR5125h3kNQ6bcqLye5G7UF7qz6xL9qHLDSAY3baagfmLZABz75
+<p><img src="https://raw.githubusercontent.com/goldstrike77/goldstrike77.github.io/master/img/xmr_address.png" align="left" /></p>

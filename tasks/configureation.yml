@@ -1,32 +1,42 @@
 ---
-- name: HaProxy PKI file transfer
+- name: HaProxy PKI file transfer.
   copy:
-    src: '{{ item.src }}'
-    dest: '{{ item.dest }}'
-    owner: '{{ item.owner }}'
-    group: '{{ item.group }}'
-    mode: '0644'
-  loop:
-    - { src: 'ssl/', dest: '/etc/haproxy/ssl', owner: 'root', group: 'root' }
-  register: haproxy_pki_update
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    owner: "{{ item.owner }}"
+    group: "{{ item.group }}"
+    mode: "0644"
+  loop: 
+    - { src: "ssl/", dest: "/etc/haproxy/ssl", owner: "root", group: "root" }
 
 - name: Configure kernel parameters.
   sysctl:
-    name: '{{ item.variable }}'
-    value: '{{ item.value }}'
-    state: 'present'
-    reload: 'yes'
-    sysctl_set: 'yes'
-    sysctl_file: '/etc/sysctl.d/20-sysctl.conf'
-  with_items:
-    - '{{ haproxy_kernel_parameters }}'
+    name: "{{ item.variable }}"
+    value: "{{ item.value }}"
+    state: "present"
+    reload: "yes"
+    sysctl_set: "yes"
+    sysctl_file: "/etc/sysctl.d/20-sysctl.conf"
+  loop: "{{ haproxy_kernel_parameters }}"
 
 - name: HaProxy configuration file transfer.
   template:
-    src: 'haproxy.cfg.j2'
-    dest: '/etc/haproxy/haproxy.cfg'
-    backup: 'yes'
-    owner: 'root'
-    group: 'root'
-    mode: '0644'
-  register: haproxy_conf_update
+    src: "haproxy.cfg.j2"
+    dest: "/etc/haproxy/haproxy.cfg"
+    backup: "yes"
+    owner: "root"
+    group: "root"
+    mode: "0644"
+  when: not haproxy_keepalived_dept | bool
+  notify: "Ensure haproxy service is enabled."
+
+- name: HaProxy configuration file transfer.
+  template:
+    src: "haproxy.cfg.j2"
+    dest: "/etc/haproxy/haproxy.cfg"
+    backup: "yes"
+    owner: "root"
+    group: "root"
+    mode: "0644"
+  when: haproxy_keepalived_dept | bool
+  notify: "Ensure haproxy service is disabled."
