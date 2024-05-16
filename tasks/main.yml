@@ -10,24 +10,26 @@
   when: haproxy_servers is not defined or haproxy_servers | length < 1
 
 - name: Include tasks for specific OS.
-  include: "{{ ansible_distribution_file_variety }}.yml"
+  ansible.builtin.include_tasks: "{{ ansible_distribution_file_variety }}.yml"
 
 - name: Straight to getenforce selinux status.
-  include: "selinux.yml"
+  ansible.builtin.include_tasks: "selinux.yml"
 
 - name: Include firewall tasks.
-  include: "firewall.yml"
+  ansible.builtin.include_tasks: "firewall.yml"
 
 - name: Include configuration tasks.
-  include: "configureation.yml"
+  ansible.builtin.include_tasks: "configureation.yml"
 
-- include_tasks: "keepalived.yml"
+- name: Include KeepAlived tasks.
+  ansible.builtin.include_tasks: "keepalived.yml"
   when: haproxy_keepalived_dept | bool
 
 - name: Include prometheus exporter tasks.
-  include: "exporter.yml"
+  ansible.builtin.include_tasks: "exporter.yml"
 
-- include_tasks: "register.yml"
+- name: Include service mesh tasks.
+  ansible.builtin.include_tasks: "register.yml"
   when:
     - exporter_is_install | bool
     - consul_public_register | bool

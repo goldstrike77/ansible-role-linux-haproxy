@@ -11,7 +11,4 @@ case $STATE in
         "FAULT")  /usr/bin/systemctl stop haproxy haproxy_exporter
                   exit 0
                   ;;
-        *)        /sbin/logger "haproxy unknown state"
-                  exit 1
-                  ;;
 esac
