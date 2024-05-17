@@ -7,14 +7,6 @@
     daemon_reload: "yes"
   listen: Ensure haproxy service is enabled.
 
-- name: Disable HaProxy service.
-  systemd:
-    name: "haproxy.service"
-    enabled: "no"
-    state: "stopped"
-    daemon_reload: "yes"
-  listen: Ensure haproxy service is disabled.
-
 - name: Enable Keepalived service.
   systemd:
     name: "keepalived.service"
@@ -30,14 +22,6 @@
     state: "restarted"
     daemon_reload: "yes"
   listen: Ensure haproxy exporter service is enabled.
-
-- name: Disable HaProxy exporter service.
-  systemd:
-    name: "haproxy_exporter.service"
-    enabled: "no"
-    state: "stopped"
-    daemon_reload: "yes"
-  listen: Ensure haproxy exporter service is disabled.
 
 - name: Enable Keepalived exporter service.
   systemd:

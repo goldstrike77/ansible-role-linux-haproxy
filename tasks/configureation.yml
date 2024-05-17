@@ -6,7 +6,7 @@
     owner: "{{ item.owner }}"
     group: "{{ item.group }}"
     mode: "0644"
-  loop: 
+  loop:
     - { src: "ssl/", dest: "/etc/haproxy/ssl", owner: "root", group: "root" }
 
 - name: Configure kernel parameters.
@@ -27,16 +27,4 @@
     owner: "root"
     group: "root"
     mode: "0644"
-  when: not haproxy_keepalived_dept | bool
   notify: "Ensure haproxy service is enabled."
-
-- name: HaProxy configuration file transfer.
-  template:
-    src: "haproxy.cfg.j2"
-    dest: "/etc/haproxy/haproxy.cfg"
-    backup: "yes"
-    owner: "root"
-    group: "root"
-    mode: "0644"
-  when: haproxy_keepalived_dept | bool
-  notify: "Ensure haproxy service is disabled."

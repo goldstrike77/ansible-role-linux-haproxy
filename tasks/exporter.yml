@@ -30,17 +30,6 @@
     group: "root"
     mode: "0644"
   notify: "Ensure haproxy exporter service is enabled."
-  when: not haproxy_keepalived_dept | bool
-
-- name: HaProxy exporter configure file transfer.
-  template:
-    src: "haproxy_exporter.default.j2"
-    dest: "/etc/default/haproxy_exporter"
-    owner: "root"
-    group: "root"
-    mode: "0644"
-  notify: "Ensure haproxy exporter service is enabled."
-  when: haproxy_keepalived_dept | bool
 
 - name: Keepalived exporter configure file transfer.
   template:
@@ -50,4 +39,3 @@
     group: "root"
     mode: "0644"
   notify: "Ensure keepalived exporter service is enabled."
-  when: haproxy_keepalived_dept | bool

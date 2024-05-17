@@ -1,7 +1,11 @@
 global_defs {
   router_id LVS_DEVEL
 }
-
+vrrp_script chk_haproxy {
+  script "killall -0 haproxy"
+  interval 1
+  weight -2
+}
 vrrp_instance VI_1 {
   state {% if haproxy_servers[0] in ansible_default_ipv4.address %}MASTER{% else %}BACKUP{% endif %}
 
@@ -23,8 +27,10 @@ vrrp_instance VI_1 {
 {% endif %}
 {% endfor %}
   }
+  track_script {
+    chk_haproxy
+  }
   virtual_ipaddress {
     {{ haproxy_keepalived_vip }}
   }
-  notify /etc/keepalived/notify-keepalived.sh
 }

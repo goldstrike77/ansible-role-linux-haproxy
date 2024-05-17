@@ -22,14 +22,6 @@
     mode: "0644"
   notify: "Ensure keepalived service is enabled."
 
-- name: HaProxy service control file transfer.
-  copy:
-    src: "notfiy-keepalived.sh"
-    dest: "/etc/keepalived/notify-keepalived.sh"
-    owner: "root"
-    group: "root"
-    mode: "0755"
-
 - name: Keepalived systemd configuration.
   lineinfile:
     state: "present"
